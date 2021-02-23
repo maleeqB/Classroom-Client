@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Classroom Client</string>
+    <string name="welcome_message"><![CDATA[
+
+          <h1 style="text-align:center">Google Classroom Client</h1>
+
+    <p><b>Classroom</b> is a minimal software targeted towards Students of various levels in order to access course material and announcements by Course Administrators on-the-go.<br>
+        All limitations of this app is beyond the developer of the software and it has developed to make the most of the Classroom API.<br>
+        The app was primarily created due to the poor state of the Google Classroom Android Application available on the Google Play Store.<br>
+    <b>This Application requires the Updated version of the Google Play Services.<br>Download it before filling a bug report</b>
+        <p style="text-align:center">Why choose <b>this</b> Classroom client?</p>
+    <ul>
+        <li>Makes Course announcements by Administrators available offline in a nice user-interface</li>
+        <li>Notifications for CourseWorks *</li>
+        <li>Availability of Google Classroom Web UI mode to cater for the limitations of the Application *</li>
+    </ul>
+    <br>
+    <span style="font-style: italic;">features marked above are still under development …</span>
+
+    ]]></string>
+    <string name="database_caution">
+        <![CDATA[
+        <body>
+    <h1 style="text-align:center">Reset Database!!</h1>
+    <p>You\'re about to Sign out of this Account, Please be informed that all Saved data will be wiped.</p>
+    <br><br>
+    <p>Would you like to continue?</p>
+</body>
+        ]]>
+    </string>
+
+    <string name="copy_right" translatable="false">Copyrights © %1$d</string>
+    <string name="about">
+        <![CDATA[
+        Hi there, I am <b>AbdulMalik Bello</b>, a student of the Department of Computer Engineering University of Ilorin, a Software developer and a StackOverflow contributor.
+    <br>I created this application to make it easy for students to sync to sync their Google Classroom CourseWorks and make them available offline in a nice user interface.
+    <br>You can support the development of this App and my development career by clicking the Button below to Buy_Me_A_Coffee
+
+         ]]>
+    </string>
+</resources>
