@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<head></head>
+<style>
+
+    body{
+        font-size:18px;
+    }
+    h5{
+        text-align: center;
+    }
+</style>
+<body>
+    <h1 style="text-align:center">Classroom Client</h1>
+    <ul>
+        <li><a href="#about">About App</a></li>
+        <li><a href="#limitations">Limitations</a></li>
+        <li><a href="#drive_permission">Google Drive Document Requesting Permission</a></li>
+        <li><a href="#moving_to_top">App automatically move to top</a></li>
+        <li><a href="#sign_out_revoke_access">Sign Out vs Revoke Access</a></li>
+        <li><a href="#ads">Ads</a></li>
+        <li><a href="#development">Developing the App</a></li>
+    </ul>
+
+   <h5><a name="about">About App</a></h5>
+   <p>This is a minimal implement of Google Classroom, the main
+       idea behind this is to make Classroom Announcement available to Students
+       when Offline.
+       <br>Since the idea for the is Clear enough therefore there's no Support for Course Administrators
+       <br>Certain features such as Creating Announcement in Classrooms have been disabled
+   </p>
+   <h5><a name="limitations">Limitations</a></h5>
+   <p>Even though the main purpose of the App is to sync Course state for Classroom students, 
+       Users should be aware of the following liumitations:<br>
+       <ul>
+           <li>Comments on Announcement ain't available</li>
+           <li>Only Course Administrators can View all Students in a given Classroom</li>
+           <li>CourseWorks can't be submitted directly from the App</li>
+       </ul>
+       <br><span style="font-family: monospace; font-weight: bold;">Any other feature apart from these was only as a result of mere design Choice</span>
+   </p>
+   <h5><a name="drive_permission">Google Drive Document Requesting Permission</a></h5>
+   When the Google Drive Account chooser dialog appears, open Attachments only with E-mail accounts 
+   used for the given Classroom class.
+   <br>In case you ain't signed into the  device with the Google Account used for the Classroom Course, consider signing into Google Drive with the Account.
+   </p>
+   <h5><a name="moving_to_top">App moving to top when loading Announcement</a></h5>
+   <p>
+       Once again this is only a mere design choice. The App automatically attempt to sync updates, and when updates are available it moves to the top and updates the Content of the Current View.
+   </p>
+    <h5><a name="sign_out_revoke_access">Sign Out or Revoke Access</a></h5>
+        Consider signing out of the app only for simple cases such as switching between Google Accounts.
+        <br>Revoking <b>Classroom Client</b> access disconnects this Application with your Google Account, Signing back into the app would require you to grant the Scopes required by the App again.
+    </p>
+   <h5><a name="ads">Ads</a></h5>
+   <p>
+       This is a <b>free</b> software. <b>free</b> here translates to both <b>Freedom</b> and <b>Price</b>, you probably downloaded both the Sources and binary output from the Github page.
+       <br>Ads or any other addition content of such in the App is placed by devs with the Development machine.
+   </p>
+   <h5><a name="development">Developing the App</a></h5>
+   <p>
+       Developing the app should be straightforward, the source code was annotated as much as I could. I would be willing to post development tutorial on https://maleeqB.github.io, if you interested in building the app and feel stucked, send me a mail at malikbello084@gmail.com with the tag <b>Classroom Client</b>
+   </p>
+</body>
