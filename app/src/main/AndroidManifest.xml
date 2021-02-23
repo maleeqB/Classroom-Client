@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codewithmab.classroomclient">
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,6 +11,9 @@
         android:theme="@style/Theme.ClassroomClient">
         <activity android:name=".AboutActivity" />
         <activity android:name=".HelpActivity" />
+        <activity
+            android:name=".CourseDetailsActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout" />
         <activity
             android:name=".SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout" />
