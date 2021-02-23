@@ -83,7 +83,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         //check if user already signed in and move to Courses Activity
         if(account != null){
-            //startActivity(new Intent(SignInActivity.this, CoursesActivity.class));
+            startActivity(new Intent(SignInActivity.this, CoursesActivity.class));
             finish();
         }
 
@@ -121,7 +121,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             Toast.makeText(this,"Sign in Successfully",Toast.LENGTH_SHORT).show();
-            //startActivity(new Intent(SignInActivity.this, CoursesActivity.class));
+            startActivity(new Intent(SignInActivity.this, CoursesActivity.class));
             finish();
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
