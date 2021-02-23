@@ -289,10 +289,10 @@ class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         ((CourseViewHolder) holder).section.setText(li.get(position).getSection());
 
         holder.itemView.setOnClickListener(v -> {
-            /*Intent intent = new Intent(holder.itemView.getContext(), CourseDetailsActivity.class);
+            Intent intent = new Intent(holder.itemView.getContext(), CourseDetailsActivity.class);
             intent.putExtra("id",li.get(position).getId());
             intent.putExtra("title",li.get(position).getTitle());
-            holder.itemView.getContext().startActivity(intent);*/
+            holder.itemView.getContext().startActivity(intent);
         });
     }
 
