@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -65,6 +66,7 @@ public class CoursesActivity extends AppCompatActivity {
             ClassroomScopes.CLASSROOM_COURSEWORK_STUDENTS
     };
 
+    LinearLayoutManager lin;
     AlphaAnimation inAnimation;
     AlphaAnimation outAnimation;
 
@@ -77,11 +79,14 @@ public class CoursesActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_courses);
 
+        setTitle("Classroom Courses");
         courseItems = new ArrayList<>();
         progressBarHolder = findViewById(R.id.progressBarHolder);
         relativeLayout = findViewById(R.id.courses_relativelayout);
 
         recyclerView = findViewById(R.id.courses_recyclerView);
+        lin=new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(lin);
     }
 
     @Override
@@ -189,10 +194,9 @@ public class CoursesActivity extends AppCompatActivity {
         if(this.courseItems.size() == courseItems.size())
             return;
         this.courseItems = courseItems;
-        LinearLayoutManager lin=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(lin);
         recyclerView.setAdapter(new CoursesAdapter(this, this.courseItems));
         showMsg("Fetching new Courses ...");
+
     }
     public void putDialog(){
         inAnimation = new AlphaAnimation(0f, 1f);

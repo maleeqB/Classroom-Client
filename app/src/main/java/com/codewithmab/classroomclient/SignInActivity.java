@@ -118,9 +118,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            completedTask.getResult(ApiException.class);
 
-            Toast.makeText(this,"Sign in Successfully",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Signed in Successfully",Toast.LENGTH_SHORT).show();
             startActivity(new Intent(SignInActivity.this, CoursesActivity.class));
             finish();
         } catch (ApiException e) {

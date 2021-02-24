@@ -33,6 +33,8 @@ public class AnnouncementsFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        if(getActivity() != null)
+            getActivity().setTitle(" Classroom Announcement");
         courseId = getArguments().getString("courseId");
 
         courseDetailsItems = new ArrayList<>();

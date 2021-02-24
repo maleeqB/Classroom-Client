@@ -51,8 +51,10 @@ public class CourseDetailsActivity extends AppCompatActivity {
     FrameLayout progressBarHolder;
     BottomNavigationView bottomNavigationView;
 
+    //a list of all the fragments to be displayed by this activity
+    //initialized in onCreate, not using List#of as it's supported only in newer versions of Android
     List<Fragment> fragmentList = new ArrayList<>(); //List.of(new AnnouncementsFragment(), new CourseWorksFragment(), new UserProfilesFragment());
-    CurrentFragment currentFragment;
+
 
     final String[] SCOPES = {
             ClassroomScopes.CLASSROOM_COURSES,
@@ -76,6 +78,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
     //The current Fragment being displayed to the User
     enum CurrentFragment{Announcements, CourseWork, People}
 
+    //keep track of the displayed fragment
+    CurrentFragment currentFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -301,6 +305,9 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
 }
 
+/**
+ * Background thread that handles Fetching of Each Course details such as Announcements and CourseWorks
+ */
 class FetchCourseDetailsThread extends HandlerThread {
     WeakReference<CourseDetailsActivity> activityWeakReference;
 

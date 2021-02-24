@@ -35,6 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        setTitle("Settings");
         progressBarHolder = findViewById(R.id.progressBarHolder);
 
         signOutButton = findViewById(R.id.sign_out_button);

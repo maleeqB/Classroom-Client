@@ -28,6 +28,9 @@ public class UserProfilesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        if(getActivity() != null)
+            getActivity().setTitle("Users");
         View v = inflater.inflate(R.layout.course_details_fragment, container, false);
 
         courseId = getArguments().getString("courseId");

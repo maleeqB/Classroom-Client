@@ -24,6 +24,7 @@ public class AboutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setTitle("About");
         Element whatsappElement = new Element();
         whatsappElement.setIconDrawable(R.mipmap.whatsapp);
         whatsappElement.setTitle("WhatsApp");
