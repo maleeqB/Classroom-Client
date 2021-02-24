@@ -5,17 +5,9 @@
           <h1 style="text-align:center">Google Classroom Client</h1>
 
     <p><b>Classroom</b> is a minimal software targeted towards Students of various levels in order to access course material and announcements by Course Administrators on-the-go.<br>
-        All limitations of this app is beyond the developer of the software and it has developed to make the most of the Classroom API.<br>
-        The app was primarily created due to the poor state of the Google Classroom Android Application available on the Google Play Store.<br>
+        All limitations of this app is beyond the developer of the software and it has been developed to make the most of the Classroom API.<br>
+        The app was primarily created to make CourseWorks available offline in a nice user-interface.<br>
     <b>This Application requires the Updated version of the Google Play Services.<br>Download it before filling a bug report</b>
-        <p style="text-align:center">Why choose <b>this</b> Classroom client?</p>
-    <ul>
-        <li>Makes Course announcements by Administrators available offline in a nice user-interface</li>
-        <li>Notifications for CourseWorks *</li>
-        <li>Availability of Google Classroom Web UI mode to cater for the limitations of the Application *</li>
-    </ul>
-    <br>
-    <span style="font-style: italic;">features marked above are still under development …</span>
 
     ]]></string>
     <string name="database_caution">
