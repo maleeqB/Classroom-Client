@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.codewithmab.classroomclient">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,12 +11,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ClassroomClient">
-        <activity android:name=".AboutActivity" />
-        <activity android:name=".HelpActivity" />
         <activity
+            android:parentActivityName=".CoursesActivity"
+            android:name=".AboutActivity" />
+        <activity
+            android:parentActivityName=".CoursesActivity"
+            android:name=".HelpActivity" />
+        <activity
+            android:parentActivityName=".CoursesActivity"
             android:name=".CourseDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout" />
         <activity
+            android:parentActivityName=".CoursesActivity"
             android:name=".SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|screenLayout" />
         <activity
