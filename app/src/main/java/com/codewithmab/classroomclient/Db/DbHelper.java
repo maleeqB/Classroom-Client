@@ -3,11 +3,8 @@ package com.codewithmab.classroomclient.Db;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.MatrixCursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 import com.codewithmab.classroomclient.CourseDetailsItem;
 import com.codewithmab.classroomclient.CourseItem;
@@ -18,6 +15,10 @@ import com.codewithmab.classroomclient.UserProfileItem;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Helper Class for performing all database operations
+ * As this a multi-threaded application the database is never closed
+ */
 public class DbHelper extends SQLiteOpenHelper {
     private static DbHelper mInstance = null;
 
@@ -139,7 +140,19 @@ public class DbHelper extends SQLiteOpenHelper {
         return courseItems;
     }
 
-    public boolean addCourseDetailsItem(String courseId, CourseDetailsItem courseDetailsItem){
+    public CourseDetailsItem getLatestCourseDetailsItem(String courseId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String COURSE_TABLE = "_"+courseId;
+        String MATERIALS_TABLE = "_"+courseId+"Material";
+        Cursor cursor = db.rawQuery("SELECT * FROM " + COURSE_TABLE + " ORDER BY " + TIME + " DESC", null);
+
+        if(cursor.moveToFirst())
+             return new CourseDetailsItem(cursor.getString(1), Long.valueOf(cursor.getString(2)), cursor.getString(3), getMaterials(MATERIALS_TABLE, cursor.getString(4)), cursor.getString(4));
+        cursor.close();
+        return null;
+    }
+
+    public void addCourseDetailsItem(String courseId, CourseDetailsItem courseDetailsItem){
         createTables(courseId);
         String COURSE_TABLE = "_"+courseId;
         String MATERIALS_TABLE = "_"+courseId+"Material";
@@ -148,7 +161,7 @@ public class DbHelper extends SQLiteOpenHelper {
         //Check if Item already exists in table
         Cursor c = db.rawQuery("SELECT * FROM "+COURSE_TABLE+" WHERE "+ANNOUNCEMENT_IDENTITY+" = '"+courseDetailsItem.getAnnouncementId()+"'", null);
         if(c.moveToFirst())
-            return false;
+            return;
         c.close();
         ContentValues values = new ContentValues();
         values.put(MESSAGE, courseDetailsItem.getMessage());
@@ -164,7 +177,6 @@ public class DbHelper extends SQLiteOpenHelper {
             values.put(ANNOUNCEMENT_IDENTITY, courseDetailsItem.getAnnouncementId());
             db.insert(MATERIALS_TABLE, null, values);
         }
-        return true;
     }
 
     public boolean addCourseWorkItem(String courseId, CourseWorkItem courseWorkItem){
