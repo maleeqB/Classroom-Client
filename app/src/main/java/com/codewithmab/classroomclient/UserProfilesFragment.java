@@ -1,13 +1,19 @@
 package com.codewithmab.classroomclient;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,6 +50,7 @@ public class UserProfilesFragment extends Fragment {
         return v;
     }
 
+
     public void popupLayout(){
         List<UserProfileItem> userProfileItems = DbHelper.getInstance(getContext()).getAllUsersProfile(courseId);
         if(this.userProfileItems.size() == userProfileItems.size())
@@ -64,7 +71,7 @@ public class UserProfilesFragment extends Fragment {
         }
 
         this.userProfileItems = userProfileItems;
-        recyclerView.setAdapter(new PeopleProfileAdapter(peopleItems));
+        recyclerView.setAdapter(new PeopleProfileAdapter((CourseDetailsActivity) getActivity(), peopleItems));
         if(getActivity() !=null)
             ((CourseDetailsActivity)getActivity()).showMsg("Fetching new User Profiles ...");
     }
@@ -74,9 +81,15 @@ public class UserProfilesFragment extends Fragment {
 class PeopleProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<PeopleItem> peopleItems;
-
-    public PeopleProfileAdapter(List<PeopleItem> peopleItems){
+    CourseDetailsActivity courseDetailsActivity;
+    private static final String CARD_COLOR = "card_color";
+    SharedPreferences sharedPreferences;
+    String color;
+    public PeopleProfileAdapter(CourseDetailsActivity courseDetailsActivity, List<PeopleItem> peopleItems){
         this.peopleItems = peopleItems;
+        this.courseDetailsActivity = courseDetailsActivity;
+        sharedPreferences = courseDetailsActivity.getSharedPreferences(CARD_COLOR, Context.MODE_PRIVATE);
+        color = sharedPreferences.getString(CARD_COLOR, "White");
     }
     @NonNull
     @Override
@@ -96,6 +109,26 @@ class PeopleProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((PeopleViewHolder) holder).title.setText(peopleItems.get(position).getUserProfileItem().getName());
+
+
+        switch (color) {
+            case "White":
+                ((PeopleViewHolder) holder).cardView.setCardBackgroundColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                break;
+            case "Green":
+                ((PeopleViewHolder) holder).cardView.setCardBackgroundColor(courseDetailsActivity.getResources().getColor(R.color.green));
+                ((PeopleViewHolder) holder).title.setTextColor(courseDetailsActivity.getResources().getColor(R.color.black));
+                break;
+            case "Yellow":
+                ((PeopleViewHolder) holder).cardView.setCardBackgroundColor(courseDetailsActivity.getResources().getColor(R.color.yellow));
+                ((PeopleViewHolder) holder).title.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                break;
+            case "Blue":
+                ((PeopleViewHolder) holder).cardView.setCardBackgroundColor(courseDetailsActivity.getResources().getColor(R.color.blue));
+                ((PeopleViewHolder) holder).title.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                break;
+        }
+
     }
 
     @Override
@@ -117,10 +150,12 @@ class PeopleProfileAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public static class PeopleViewHolder extends RecyclerView.ViewHolder{
         TextView title;
+        CardView cardView;
 
         public PeopleViewHolder(View v){
             super(v);
 
+            cardView = v.findViewById(R.id.user_profile_cardview);
             title=v.findViewById(R.id.text);
 
         }

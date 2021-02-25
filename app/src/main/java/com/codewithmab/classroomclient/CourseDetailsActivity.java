@@ -1,12 +1,17 @@
 package com.codewithmab.classroomclient;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -43,6 +48,9 @@ import java.util.List;
 import java.util.Map;
 
 public class CourseDetailsActivity extends AppCompatActivity {
+    private static String COURSE_NAME;
+    SharedPreferences sharedPreferences;
+
     FetchCourseDetailsThread fetchCourseDetailsThread = new FetchCourseDetailsThread("FetchCourseDetailsThread", this);
 
     String courseId;
@@ -51,6 +59,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
     FrameLayout progressBarHolder;
     BottomNavigationView bottomNavigationView;
 
+    boolean isOfflineMode = false;
+    boolean isOfflineModeActivated = false;
     //a list of all the fragments to be displayed by this activity
     //initialized in onCreate, not using List#of as it's supported only in newer versions of Android
     List<Fragment> fragmentList = new ArrayList<>(); //List.of(new AnnouncementsFragment(), new CourseWorksFragment(), new UserProfilesFragment());
@@ -80,12 +90,31 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     //keep track of the displayed fragment
     CurrentFragment currentFragment;
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_course_details, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        isOfflineMode = true;
+        if(!isOfflineModeActivated)
+            showMsg("Cancelling all background tasks");
+        else showMsg("Already working offline");
+        return true;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_details);
         courseId = getIntent().getStringExtra("id");
+        COURSE_NAME = "_"+courseId;
         setTitle(getIntent().getStringExtra("title"));
+
+        sharedPreferences = getApplicationContext().getSharedPreferences(COURSE_NAME, Context.MODE_PRIVATE);
 
         fragmentList.addAll(Arrays.asList(new AnnouncementsFragment(), new CourseWorksFragment(), new UserProfilesFragment()));
         for (Fragment f: fragmentList) {
@@ -128,7 +157,15 @@ public class CourseDetailsActivity extends AppCompatActivity {
             public void run() {
                 CourseDetailsActivity activity = fetchCourseDetailsThread.activityWeakReference.get();
 
+                if(isOfflineMode){
+                    runOnUiThread(()->activity.showMsg("Now working offline"));
+                    runOnUiThread(activity::removeDialog);
+
+                    isOfflineModeActivated = true;
+                    return;
+                }
                 runOnUiThread(activity::putDialog);
+
                 if(!(isInternetWorking())){
                     runOnUiThread(()->activity.showMsg("No Internet Connection ..."));
                     runOnUiThread(activity::popupLayout);
@@ -189,10 +226,10 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
 
                     do {
-                        if(isAnnouncementUpdated)
+                        if(isAnnouncementUpdated && sharedPreferences.contains(COURSE_NAME))
                             break;
                         ListAnnouncementsResponse response = service.courses().announcements().list(courseId)
-                                .setPageSize(200)
+                                .setPageSize(10)
                                 .setPageToken(pageToken)
                                 .execute();
                         List<Announcement> mAnnouncements = response.getAnnouncements();
@@ -200,6 +237,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
                             break;
                         else{
                             for(Announcement announcement : response.getAnnouncements()){
+                                if(isAnnouncementUpdated && sharedPreferences.contains(COURSE_NAME))
+                                    break;
                                 String message = announcement.getText();
                                 String time = announcement.getCreationTime();
                                 String author = announcement.getCreatorUserId();
@@ -228,11 +267,20 @@ public class CourseDetailsActivity extends AppCompatActivity {
                                 else author = "User - "+author;
 
                                 CourseDetailsItem item = new CourseDetailsItem(message, time, author, materials, announcementId);
-                                if (!(databaseHelper.addCourseDetailsItem(courseId, item)))
+                                if(item.equals(databaseHelper.getLatestCourseDetailsItem(courseId))){
+                                    if(sharedPreferences.contains(COURSE_NAME))
+                                        runOnUiThread(()->activity.showMsg("Announcements updated!"));
                                     isAnnouncementUpdated = true;
-
+                                }
+                                databaseHelper.addCourseDetailsItem(courseId, item);
                             }
                             pageToken = response.getNextPageToken();
+                            if(pageToken == null){
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.putString(COURSE_NAME,"updated");
+                                editor.apply();
+                            }
+
                         }
                         runOnUiThread(activity::popupLayout);
                     } while (pageToken != null);
@@ -242,7 +290,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
                 courseDetailsHandler.postDelayed(this, 1000*30);
             }
         };
-        courseDetailsHandler.post(runnable);
+        if(!isOfflineMode)
+            courseDetailsHandler.post(runnable);
     }
 
 

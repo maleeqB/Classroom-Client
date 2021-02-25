@@ -8,19 +8,37 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.TimeZone;
 
 /**
  * A java Class to Model each Announcement in a given Google Classroom Course
  */
-public class CourseDetailsItem{
+public class CourseDetailsItem implements Comparable<CourseDetailsItem>{
     private final String announcementId;
     private final String message;
     private final Long time;
     private final String author;
     private List<Material> materials;
 
-    public CourseDetailsItem(String message, String time, String author,List<Material> materials, String announcementId){
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CourseDetailsItem that = (CourseDetailsItem) o;
+        return Objects.equals(announcementId, that.announcementId) &&
+                Objects.equals(message, that.message) &&
+                Objects.equals(time, that.time) &&
+                Objects.equals(author, that.author) &&
+                Objects.equals(materials, that.materials);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(announcementId, message, time, author, materials);
+    }
+
+    public CourseDetailsItem(String message, String time, String author, List<Material> materials, String announcementId){
         this.message = message;
         this.time = getLongTime(time);
         this.author = author;
@@ -71,5 +89,10 @@ public class CourseDetailsItem{
             dateFormat = new SimpleDateFormat("E, h:mm a", Locale.getDefault());
         //dateFormat.setTimeZone(TimeZone.getTimeZone("GMT"));
         return dateFormat.format(new Date(time));
+    }
+
+    @Override
+    public int compareTo(CourseDetailsItem o) {
+        return this.getTime().compareTo(o.getTime());
     }
 }

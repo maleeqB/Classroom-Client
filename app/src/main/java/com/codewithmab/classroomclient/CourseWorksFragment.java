@@ -1,5 +1,7 @@
 package com.codewithmab.classroomclient;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,7 +52,7 @@ public class CourseWorksFragment extends Fragment {
         if(this.courseWorkItems.size() == courseWorkItems.size())
             return;
         this.courseWorkItems = courseWorkItems;
-        recyclerView.setAdapter(new CourseWorkAdapter(this.courseWorkItems));
+        recyclerView.setAdapter(new CourseWorkAdapter((CourseDetailsActivity) getActivity(), this.courseWorkItems));
         if(getActivity()!=null)
             ((CourseDetailsActivity)getActivity()).showMsg("Fetching new CourseWorks ...");
     }
@@ -58,8 +61,15 @@ public class CourseWorksFragment extends Fragment {
 class CourseWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     List<CourseWorkItem> li;
-    public CourseWorkAdapter(List<CourseWorkItem> li){
+    CourseDetailsActivity courseDetailsActivity;
+    private static final String CARD_COLOR = "card_color";
+    SharedPreferences sharedPreferences;
+    String color;
+    public CourseWorkAdapter(CourseDetailsActivity courseDetailsActivity, List<CourseWorkItem> li){
         this.li = li;
+        this.courseDetailsActivity = courseDetailsActivity;
+        sharedPreferences = courseDetailsActivity.getSharedPreferences(CARD_COLOR, Context.MODE_PRIVATE);
+        color = sharedPreferences.getString(CARD_COLOR, "White");
     }
     @NonNull
     @Override
@@ -74,6 +84,34 @@ class CourseWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ((CourseWorkViewHolder) holder).creationTime.setText("Created :" + li.get(position).getFormattedCreationTime());
         ((CourseWorkViewHolder) holder).dueTime.setText("Due :" + li.get(position).getDueDate());
         ((CourseWorkViewHolder) holder).description.setText(li.get(position).getDescription());
+
+
+        switch (color) {
+            case "White":
+                ((CourseWorkViewHolder) holder).cardView.setCardBackgroundColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                break;
+            case "Green":
+                ((CourseWorkViewHolder) holder).cardView.setCardBackgroundColor(courseDetailsActivity.getResources().getColor(R.color.green));
+                ((CourseWorkViewHolder) holder).title.setTextColor(courseDetailsActivity.getResources().getColor(R.color.black));
+                ((CourseWorkViewHolder) holder).creationTime.setTextColor(courseDetailsActivity.getResources().getColor(R.color.black));
+                ((CourseWorkViewHolder) holder).dueTime.setTextColor(courseDetailsActivity.getResources().getColor(R.color.black));
+                ((CourseWorkViewHolder) holder).description.setTextColor(courseDetailsActivity.getResources().getColor(R.color.black));
+                break;
+            case "Yellow":
+                ((CourseWorkViewHolder) holder).cardView.setCardBackgroundColor(courseDetailsActivity.getResources().getColor(R.color.yellow));
+                ((CourseWorkViewHolder) holder).title.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                ((CourseWorkViewHolder) holder).creationTime.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                ((CourseWorkViewHolder) holder).dueTime.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                ((CourseWorkViewHolder) holder).description.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                break;
+            case "Blue":
+                ((CourseWorkViewHolder) holder).cardView.setCardBackgroundColor(courseDetailsActivity.getResources().getColor(R.color.blue));
+                ((CourseWorkViewHolder) holder).title.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                ((CourseWorkViewHolder) holder).creationTime.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                ((CourseWorkViewHolder) holder).dueTime.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                ((CourseWorkViewHolder) holder).description.setTextColor(courseDetailsActivity.getResources().getColor(R.color.white));
+                break;
+        }
     }
 
     @Override
@@ -82,6 +120,8 @@ class CourseWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
     public static class CourseWorkViewHolder extends RecyclerView.ViewHolder {
+        CardView cardView;
+
         TextView title;
         TextView creationTime;
         TextView dueTime;
@@ -90,6 +130,7 @@ class CourseWorkAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         public CourseWorkViewHolder(View v){
             super(v);
 
+            cardView = v.findViewById(R.id.coursework_cardview);
             title = v.findViewById(R.id.coursework_title);
             creationTime = v.findViewById(R.id.coursework_creation_time);
             dueTime = v.findViewById(R.id.coursework_due_time);

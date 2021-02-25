@@ -1,6 +1,8 @@
 package com.codewithmab.classroomclient;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -88,6 +91,7 @@ public class CoursesActivity extends AppCompatActivity {
         lin=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(lin);
     }
+
 
     @Override
     protected void onStart() {
@@ -184,11 +188,19 @@ public class CoursesActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             onStart();
         }
+
     }
 
     public void showMsg(String message){
         Snackbar.make(findViewById(R.id.courses_relativelayout), message, Snackbar.LENGTH_LONG).show();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        recyclerView.setAdapter(new CoursesAdapter(this, this.courseItems));
+    }
+
     public void popupLayout(){
         List<CourseItem> courseItems = DbHelper.getInstance(this).getAllCourseItem();
         if(this.courseItems.size() == courseItems.size())
@@ -272,12 +284,18 @@ class FetchCoursesThread extends HandlerThread {
 }
 
 class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    private static final String CARD_COLOR = "card_color";
+    SharedPreferences sharedPreferences;
     CoursesActivity coursesActivity;
     List<CourseItem> li;
+    String color;
 
     public CoursesAdapter(CoursesActivity coursesActivity, List<CourseItem> li){
         this.coursesActivity = coursesActivity;
         this.li=li;
+
+        sharedPreferences = coursesActivity.getSharedPreferences(CARD_COLOR, Context.MODE_PRIVATE);
+        color = sharedPreferences.getString(CARD_COLOR, "White");
     }
 
     @NonNull
@@ -291,6 +309,26 @@ class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((CourseViewHolder) holder).title.setText(li.get(position).getTitle());
         ((CourseViewHolder) holder).section.setText(li.get(position).getSection());
+        switch (color) {
+            case "White":
+                ((CourseViewHolder) holder).cardView.setCardBackgroundColor(coursesActivity.getResources().getColor(R.color.white));
+                break;
+            case "Green":
+                ((CourseViewHolder) holder).cardView.setCardBackgroundColor(coursesActivity.getResources().getColor(R.color.green));
+                ((CourseViewHolder) holder).title.setTextColor(coursesActivity.getResources().getColor(R.color.black));
+                ((CourseViewHolder) holder).section.setTextColor(coursesActivity.getResources().getColor(R.color.black));
+                break;
+            case "Yellow":
+                ((CourseViewHolder) holder).cardView.setCardBackgroundColor(coursesActivity.getResources().getColor(R.color.yellow));
+                ((CourseViewHolder) holder).title.setTextColor(coursesActivity.getResources().getColor(R.color.white));
+                ((CourseViewHolder) holder).section.setTextColor(coursesActivity.getResources().getColor(R.color.white));
+                break;
+            case "Blue":
+                ((CourseViewHolder) holder).cardView.setCardBackgroundColor(coursesActivity.getResources().getColor(R.color.blue));
+                ((CourseViewHolder) holder).title.setTextColor(coursesActivity.getResources().getColor(R.color.white));
+                ((CourseViewHolder) holder).section.setTextColor(coursesActivity.getResources().getColor(R.color.white));
+                break;
+        }
 
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(holder.itemView.getContext(), CourseDetailsActivity.class);
@@ -308,10 +346,11 @@ class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public static class CourseViewHolder extends RecyclerView.ViewHolder{
 
         TextView title,section;
+        CardView cardView;
 
         public CourseViewHolder(View v){
             super(v);
-
+            cardView = v.findViewById(R.id.coursesCardView);
             title=v.findViewById(R.id.course_title);
             section=v.findViewById(R.id.course_section);
 
