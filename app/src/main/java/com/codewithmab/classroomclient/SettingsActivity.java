@@ -1,12 +1,17 @@
 package com.codewithmab.classroomclient;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +27,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final String CARD_COLOR = "card_color";
     Button signOutButton, revokeAccessButton;
     TextView accountName, accountMail;
     GoogleSignInClient mGoogleSignInClient;
@@ -30,11 +36,16 @@ public class SettingsActivity extends AppCompatActivity {
     AlphaAnimation inAnimation;
 
     FrameLayout progressBarHolder;
+    Spinner spinner;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        sharedPreferences = getApplicationContext().getSharedPreferences(CARD_COLOR, Context.MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         setTitle("Settings");
         progressBarHolder = findViewById(R.id.progressBarHolder);
 
@@ -57,6 +68,44 @@ public class SettingsActivity extends AppCompatActivity {
         revokeAccessButton.setOnClickListener(v ->{
             confirmSignOut(1);
 
+        });
+
+        spinner = findViewById(R.id.card_color_spinner);
+        String[] colors = {"White", "Green", "Yellow", "Blue"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, colors);
+        String selectedItem = sharedPreferences.getString(CARD_COLOR, "White");
+        spinner.setAdapter(adapter);
+        int spinnerPosition = adapter.getPosition(selectedItem);
+        spinner.setSelection(spinnerPosition);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        editor.putString(CARD_COLOR,"White");
+                        editor.apply();
+                        break;
+                    case 1:
+                        editor.putString(CARD_COLOR,"Green");
+                        editor.apply();
+                        break;
+                    case 2:
+                        editor.putString(CARD_COLOR,"Yellow");
+                        editor.apply();
+                        break;
+                    case 3:
+                        editor.putString(CARD_COLOR,"Blue");
+                        editor.apply();
+                        break;
+
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
     }
 
