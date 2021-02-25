@@ -9,10 +9,10 @@ android {
 
     defaultConfig {
         applicationId "com.codewithmab.classroomclient"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
-        versionName "1.0"
+        versionName "0.89"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
