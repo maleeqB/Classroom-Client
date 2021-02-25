@@ -32,6 +32,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private static final int RC_SIGN_IN = 1;
     private static final String NEW_USER = "NewUser";
+    private static final String CARD_COLOR = "card_color";
 
     //Google Classroom API Scopes required by the App
     private static final Scope[] SCOPES = {
@@ -55,6 +56,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     GoogleSignInOptions gso;
     GoogleSignInClient mGoogleSignInClient;
     SharedPreferences sharedPreferences;
+    SharedPreferences colorPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_sign_in);
 
         sharedPreferences = getApplicationContext().getSharedPreferences(NEW_USER, Context.MODE_PRIVATE);
+        colorPreferences = getApplicationContext().getSharedPreferences(CARD_COLOR, Context.MODE_PRIVATE);
+
         //Checks whether the preferences already contains the New_User key
         if(!(sharedPreferences.contains(NEW_USER)))
             displayWelcomeGuide();
@@ -97,6 +101,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         builder.setPositiveButton("OK", (dialog, which) -> {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(NEW_USER,"SignedIn");
+            editor.apply();
+            editor = colorPreferences.edit();
+            editor.putString(CARD_COLOR, "White");
             editor.apply();
             dialog.dismiss();
         });
