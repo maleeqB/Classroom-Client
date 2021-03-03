@@ -100,11 +100,15 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        isOfflineMode = true;
-        if(!isOfflineModeActivated)
-            showMsg("Cancelling all background tasks");
-        else showMsg("Already working offline");
-        return true;
+        if(item.getItemId() == R.id.offline){
+            isOfflineMode = true;
+            if(!isOfflineModeActivated)
+                showMsg("Cancelling all background tasks");
+            else showMsg("Already working offline");
+
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
